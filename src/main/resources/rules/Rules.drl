@@ -1,0 +1,46 @@
+package rules
+ 
+import  main.model.Student
+rule "non eligibla attendance"
+	when 
+		StudentObject: Student(attendance<50)
+	then
+		StudentObject.setEligible("Fail");
+	end
+rule "repeat attendance"
+	when
+		StudentObject: Student(attendance>50 && attendance<80)
+	then
+		StudentObject.setEligible("to repeat");
+	end
+
+rule "eligible attendance"
+	when 
+		StudentObject: Student(attendance>80)
+	then
+		StudentObject.setEligible("Pass");
+	end
+rule "Score poor"
+	when
+		StudentObject: Student(score<40)
+	then
+		StudentObject.setResult("poor");
+	end
+rule "Score non prom"
+	when
+		StudentObject: Student(score>40 && score<60)
+	then
+		StudentObject.setResult("average");
+	end
+rule "Score average"
+	when
+		StudentObject: Student(score>60 && score<80)
+	then
+		StudentObject.setResult("Good");
+	end
+rule "score excel"
+	when
+		StudentObject: Student(score>80)
+	then
+		StudentObject.setResult("Excellent");
+	end

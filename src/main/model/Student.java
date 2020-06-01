@@ -9,6 +9,14 @@ public class Student {
     private String result;
 
 
+    public  Student(String name, String eligible, int attendance, int score, String result) {
+        this.name=name;
+        this.eligible=eligible;
+        this.attendance=attendance;
+        this.score=score;
+        this.result=result;
+    }
+
 
     public String getName() {
         return name;

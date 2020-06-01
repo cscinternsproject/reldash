@@ -12,18 +12,18 @@ import java.util.ArrayList;
 
 public class DroolsTest {
 
-    public static final void main(String[] args) {
+    public static final void main(ArrayList<Student> lst) {
         try {
             KieServices ks = KieServices.Factory.get();
             KieContainer kContainer = ks.getKieClasspathContainer();
             KieSession kSession = kContainer.newKieSession("ksession-rule");
-            Db db = new Db();
-            ArrayList<Student> lst = db.getList();
+         //   Db db = new Db();
+         //   ArrayList<Student> lst = db.getList();
             for (Student student: lst) {
                 kSession.insert(student);
                 kSession.fireAllRules();
-                System.out.println(" Student "
-                        + student.getName() + " is " + student.getEligible() + " and is " + student.getResult());
+              //  System.out.println(" Student "
+                 //       + student.getName() + " is " + student.getEligible() + " and is " + student.getResult());
             }
 //            Student student = new Student();
 //            student.setScore(90);

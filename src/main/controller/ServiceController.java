@@ -3,6 +3,8 @@ package main.controller;
 import main.DroolsTest;
 import main.model.StudList;
 import main.model.Student;
+import main.service.RestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +17,9 @@ import java.util.List;
 @RestController
 public class ServiceController {
 
+@Autowired
+
+
     @RequestMapping(value = "/students", method = RequestMethod.GET)
     public List<Student>  get(){
 
@@ -25,6 +30,7 @@ public class ServiceController {
     @RequestMapping(value = "/students", method = RequestMethod.POST)
     public ArrayList<Student> rules(@RequestBody StudList lst){
 
+       RestService.get();
         DroolsTest.main(lst.getLst());
 
         return  lst.getLst();

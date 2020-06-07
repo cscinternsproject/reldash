@@ -14,6 +14,7 @@ public class Spring {
 
     public static void main(String[] args) {
         SpringApplication.run(Spring.class, args);
+
     }
 //
 //    @Bean

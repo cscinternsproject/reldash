@@ -1,0 +1,22 @@
+package rules
+
+import  main.model.ReleaseModel
+
+rule "Sprint over"
+	when
+		Release: ReleaseModel(SprintPerc>0.2)
+	then
+		Release.setSprintColor("Red");
+	end
+rule "Sprint medium"
+	when
+		Release: ReleaseModel(SprintPerc<0.2,SprintPerc>0.1)
+	then
+		Release.setSprintColor("Amber");
+	end
+rule "Sprint range"
+	when
+		Release: ReleaseModel(SprintPerc<0.1)
+	then
+		Release.setSprintColor("Green");
+	end

@@ -1,46 +1,21 @@
 package rules
  
-import  main.model.Student
-rule "non eligibla attendance"
+import  main.model.ReleaseModel
+rule "Release open"
 	when 
-		StudentObject: Student(attendance<50)
+		Release: ReleaseModel(openPerc>0.5)
 	then
-		StudentObject.setEligible("Fail");
+		Release.setColorLabel("Red");
 	end
-rule "repeat attendance"
+rule "Release progress"
 	when
-		StudentObject: Student(attendance>50 && attendance<80)
+		Release: ReleaseModel(progPerc>0.5)
 	then
-		StudentObject.setEligible("to repeat");
+		Release.setColorLabel("Amber");
 	end
-
-rule "eligible attendance"
-	when 
-		StudentObject: Student(attendance>80)
-	then
-		StudentObject.setEligible("Pass");
-	end
-rule "Score poor"
+rule "Release closed"
 	when
-		StudentObject: Student(score<40)
+		Release: ReleaseModel(closPerc>0.5)
 	then
-		StudentObject.setResult("poor");
-	end
-rule "Score non prom"
-	when
-		StudentObject: Student(score>40 && score<60)
-	then
-		StudentObject.setResult("average");
-	end
-rule "Score average"
-	when
-		StudentObject: Student(score>60 && score<80)
-	then
-		StudentObject.setResult("Good");
-	end
-rule "score excel"
-	when
-		StudentObject: Student(score>80)
-	then
-		StudentObject.setResult("Excellent");
+		Release.setColorLabel("Red");
 	end

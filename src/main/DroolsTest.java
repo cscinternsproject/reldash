@@ -1,5 +1,6 @@
 package main;
 
+import main.model.ReleaseModel;
 import main.model.Student;
 import main.service.RestService;
 import org.kie.api.KieServices;
@@ -16,7 +17,7 @@ public class DroolsTest {
 //    @Autowired
 //    public  static RestService r;
 
-    public static final void main(ArrayList<Student> lst) {
+    public static final void main(ReleaseModel model) {
 
         try {
 //            System.out.println("check out");
@@ -24,14 +25,16 @@ public class DroolsTest {
             KieServices ks = KieServices.Factory.get();
             KieContainer kContainer = ks.getKieClasspathContainer();
             KieSession kSession = kContainer.newKieSession("ksession-rule");
+            kSession.insert(model);
+            kSession.fireAllRules();
          //   Db db = new Db();
          //   ArrayList<Student> lst = db.getList();
-            for (Student student: lst) {
-                kSession.insert(student);
-                kSession.fireAllRules();
-              //  System.out.println(" Student "
-                 //       + student.getName() + " is " + student.getEligible() + " and is " + student.getResult());
-            }
+//            for (Student student: lst) {
+//                kSession.insert(student);
+//                kSession.fireAllRules();
+//              //  System.out.println(" Student "
+//                 //       + student.getName() + " is " + student.getEligible() + " and is " + student.getResult());
+//            }
 //            Student student = new Student();
 //            student.setScore(90);
 //            student.setAttendance(90);

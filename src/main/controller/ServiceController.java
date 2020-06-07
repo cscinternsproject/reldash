@@ -1,8 +1,11 @@
 package main.controller;
 
+import main.Db;
 import main.DroolsTest;
+import main.model.ReleaseModel;
 import main.model.StudList;
 import main.model.Student;
+import main.model.request;
 import main.service.RestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,13 +30,14 @@ public class ServiceController {
                 new Student("zaid","pass",3,3,"pass"));
     }
 
-    @RequestMapping(value = "/students", method = RequestMethod.POST)
-    public ArrayList<Student> rules(@RequestBody StudList lst){
+    @RequestMapping(value = "/ReleaseDashboard", method = RequestMethod.POST)
+    public ReleaseModel fire_rules(@RequestBody request obj){
 
-       RestService.get();
-        DroolsTest.main(lst.getLst());
-
-        return  lst.getLst();
+    return  Db.getResponse(obj.getProject(),obj.getVersion(),obj.getSprint());
+//       RestService.get();
+//        DroolsTest.main(lst.getLst());
+//
+       //return  new ArrayList<>();
 
     }
 

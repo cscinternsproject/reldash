@@ -1,0 +1,83 @@
+
+
+#graph {
+  position: absolute;
+  top:100px;
+  left:800px;
+  margin:80px;
+  width:220px; height:220px;
+}
+canvas {
+  display: block;
+  position:absolute;
+  top:0;
+  left:0;
+}
+#ring {
+  color:rgb(12, 153, 209);
+  display:block;
+  line-height:220px;
+  text-align:center;
+  width:220px;
+  font-family:sans-serif;
+  font-size:40px;
+  font-weight:100;
+  margin-left:5px;
+}
+
+#per{
+  position: absolute;
+  z-index: 3;
+  left: 970px;
+  top:270px;
+}
+
+
+#heading{
+  margin-top: 50px;
+  margin-left: 150px;
+  margin-bottom: 70px;
+  color:#306dcf;
+}
+
+.container{
+
+  margin: 0;
+}
+
+#rls{
+  z-index: 5;
+  position: relative;
+  top: 0;
+  left: 980px;
+}
+
+.rdate{
+  margin-left: 150px ;
+  margin-top: 15px;
+}
+
+.column {
+padding: 15px;
+display: inline-block;
+}
+
+
+.Row{
+  margin-top: 30px;
+  margin-left: 100px;
+  width: 420px;
+}
+.Row::after {
+
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.bg{
+  margin-top: 100px;
+  background-color: #f2f2f2;
+  padding: 40px;
+}
+

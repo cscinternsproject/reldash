@@ -10,7 +10,7 @@ declare const bar: any;
 })
 export class HeadComponent implements OnInit {
   public Data : any;
-  title = 'Frontend';
+ 
 
   constructor(private dataservice: ServiceService) { }
 
@@ -23,6 +23,7 @@ export class HeadComponent implements OnInit {
     this.date(this.Data);
 
     });
+    
   }
 
   date(Data){
@@ -36,6 +37,6 @@ export class HeadComponent implements OnInit {
     Data.value=80;
 
     bar(80);
-    console.log(Data);
+
   }
 }

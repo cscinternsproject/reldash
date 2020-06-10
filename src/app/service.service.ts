@@ -8,11 +8,17 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ServiceService {
-  private url: string ='https://my-json-server.typicode.com/ZaidBJ/Sample-Json/ReleaseDate'
+  private url: string ='https://my-json-server.typicode.com/ZaidBJ/Sample-Json/ReleaseDate';
+   private _url : string ='https://my-json-server.typicode.com/ZaidBJ/Sample-Json/Release';
   constructor(private http: HttpClient) { }
 
   getParameter(): Observable<IParameter>
   {
     return this.http.get<IParameter>(this.url);
+  }
+  
+   getProgress(): Observable<IParameter>
+  {
+    return this.http.get<any>(this._url);
   }
 }

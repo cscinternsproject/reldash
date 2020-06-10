@@ -1,0 +1,40 @@
+.first {
+    height: 18px;
+    width: 100%;
+    background: #ddd;
+   
+}
+.second {
+    height: 18px;
+    background: #0B9200;
+}
+
+.footer{
+   
+}
+
+.bar{
+ margin-top:100px;
+ margin-bottom:90px;
+   padding-left:40px;
+  padding-right:40px;
+  padding-bottom:120px;
+  padding-top:40px;
+}
+
+#releaseBar{
+    margin-bottom:90px;
+
+}
+
+.barHead{
+    text-align:center;
+    margin-bottom:20px;
+
+}
+
+.HeadingBar{
+    text-align:right;
+    color:#306dcf;
+    margin-bottom:80px;
+}

@@ -6,12 +6,16 @@ import { AppComponent } from './app.component';
 import { HeadComponent } from './head/head.component';
 import { ServiceService } from './service.service';
 import { HttpClientModule } from '@angular/common/http';
+import { CapacityComponent } from './capacity/capacity.component';
+import { ProgressComponent } from './progress/progress.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeadComponent
+    HeadComponent,
+    CapacityComponent,
+    ProgressComponent
   ],
   imports: [
     BrowserModule,

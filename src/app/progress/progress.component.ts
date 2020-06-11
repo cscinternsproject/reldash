@@ -14,14 +14,14 @@ export class ProgressComponent implements OnInit {
 
   ngOnInit(): void {
 
-    
+
     this.dataservice.getProgress()
     .subscribe(data => {this.Data = data;
-
-    if(this.Data.Capacty=='Red')
-    this.Data.Capacty='#d42626';
-     if(this.Data.sprintColor=='Green')
-    this.Data.sprintColor='#54a84c';
+    this.Data.releasePerc=0.6;
+    // if(this.Data.Capacty=='Red')
+    // this.Data.Capacty='#d42626';
+    //  if(this.Data.sprintColor=='Green')
+    // this.Data.sprintColor='#54a84c';
     });
   }
 

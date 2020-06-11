@@ -8,17 +8,22 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ServiceService {
-  private url: string ='https://my-json-server.typicode.com/ZaidBJ/Sample-Json/ReleaseDate';
-   private _url : string ='https://my-json-server.typicode.com/ZaidBJ/Sample-Json/Release';
+  private url: string ='http://localhost:8080/ReleaseDashboard';
+   private _url : string ='http://localhost:8080/ReleaseDashboard';
   constructor(private http: HttpClient) { }
 
   getParameter(): Observable<IParameter>
   {
-    return this.http.get<IParameter>(this.url);
+    return this.http.post<IParameter>(this.url,{"project":"JIRARD",
+	"version":"Release1"
+},{headers:new HttpHeaders({'content-type': 'application/json'})});
   }
-  
+
    getProgress(): Observable<IParameter>
   {
-    return this.http.get<any>(this._url);
+  return this.http.post<IParameter>(this.url,{"project":"JIRARD",
+	"version":"Release1"
+},{headers:new HttpHeaders({'content-type': 'application/json'})});
   }
+
 }

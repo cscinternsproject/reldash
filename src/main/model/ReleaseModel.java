@@ -14,17 +14,58 @@ public class ReleaseModel {
     private long progStatus;
     @JsonIgnore
     private long closeStatus;
-
     private Date RstartDate;
     private Date RendDate;
-    @JsonIgnore
+    private String sprint;
+    private Date SstartDate;
+    private Date SendDate;
+      @JsonIgnore
     private double SprintCapacity;
     @JsonIgnore
     private double ExpectedCapacity;
     private String colorLabel;
     private String sprintColor;
     private Double openPerc;
+    private String project;
+    private String release;
 
+    private Double progPerc;
+    private Double closPerc;
+    private Double releasePerc;
+    private Double total;
+
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public String getRelease() {
+        return release;
+    }
+
+    public void setRelease(String release) {
+        this.release = release;
+    }
+
+    public Date getSstartDate() {
+        return SstartDate;
+    }
+
+    public void setSstartDate(Date sstartDate) {
+        SstartDate = sstartDate;
+    }
+
+    public Date getSendDate() {
+        return SendDate;
+    }
+
+    public void setSendDate(Date sendDate) {
+        SendDate = sendDate;
+    }
     public String getSprintColor() {
         return sprintColor;
     }
@@ -33,10 +74,6 @@ public class ReleaseModel {
         this.sprintColor = sprintColor;
     }
 
-    private Double progPerc;
-    private Double closPerc;
-    private Double releasePerc;
-    private Double total;
 
     public Double getSprintPerc() {
         return SprintPerc;
@@ -174,8 +211,16 @@ public class ReleaseModel {
         this.colorLabel = colorLabel;
     }
 
-    public void setData(long openStatus,long progStatus , long closeStatus,Double sprintCapacity, Double expectedCapacity,Date
-                        start, Date end)
+    public String getSprint() {
+        return sprint;
+    }
+
+    public void setSprint(String sprint) {
+        this.sprint = sprint;
+    }
+
+    public void setData(long openStatus, long progStatus , long closeStatus, Double sprintCapacity, Double expectedCapacity, Date
+                        start, Date end, String sprint, Date sstartDate, Date sendDate)
     {
         this.openStatus=openStatus;
         this.closeStatus=closeStatus;
@@ -184,6 +229,9 @@ public class ReleaseModel {
         this.ExpectedCapacity=expectedCapacity;
         this.RstartDate=start;
         this.RendDate=end;
+        this.sprint =sprint;
+        this.SstartDate=sstartDate;
+        this.SendDate=sendDate;
 
         setTotal();
         setOpenPerc();

@@ -14,8 +14,6 @@ import java.util.ArrayList;
 
 public class DroolsTest {
 
-//    @Autowired
-//    public  static RestService r;
 
     public static final void main(ReleaseModel model) {
 

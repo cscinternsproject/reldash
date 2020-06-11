@@ -12,6 +12,7 @@ import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import main.model.ReleaseModel;
 import main.model.Student;
+import main.service.RestService;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -37,14 +38,13 @@ public class Db{
         }
     };
 
-    public static ReleaseModel  getResponse( String project,String release,String sprint ) {
+
+
+    public static ReleaseModel  getResponse( String project,String release ) {
 
 
         MongoClient mongoClient = new MongoClient();
-
-        CodecRegistry codecRegistry = fromRegistries(MongoClient.getDefaultCodecRegistry(),
-                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-        MongoDatabase db = mongoClient.getDatabase("JiraIssue").withCodecRegistry(codecRegistry);
+        MongoDatabase db = mongoClient.getDatabase("JiraIssue");
 
         MongoCollection<Document> collection = db.getCollection("issues");
         MongoCollection<Document> CapColl = db.getCollection("ReleaseCap");
@@ -58,9 +58,19 @@ public class Db{
         long status_progress =  collection.countDocuments(and(Filters.regex("key",pattern),Filters.eq("Status","progress")));
 
         Document doc =  CapColl.find(Filters.eq("Release",release)).first();
-     //  int num =  cursor.count();
+
+
         Date RstartDate = doc.getDate("R_startDate");
         Date RendDate =doc.getDate("R_endDate");
+        Date CurrentDate = new Date();
+        Document sprintDoc =  CapColl.find(and(Filters.eq("Release",release),Filters.lte("S_startDate",CurrentDate),
+                Filters.gte("S_endDate",CurrentDate))).first();
+
+
+        String sprint =   sprintDoc.getString("Sprint");
+        Date  sStartDate = sprintDoc.getDate("S_startDate");
+        Date sendDate = sprintDoc.getDate("S_endDate");
+
 
       Double ReleaseCapacity= (Double) ( CapColl.aggregate(
                 Arrays.asList(
@@ -89,10 +99,16 @@ public class Db{
         ).first()).get("count");
 
 
+//
+
+
         ReleaseModel model= new ReleaseModel();
-        model.setData(status_open,status_progress,status_closed,SprintCapacity,TotalEstimate,RstartDate,RendDate);
-         DroolsTest.main(model);
-        System.out.println(model.getColorLabel()+ " "+ model.getSprintColor());
+        model.setData(status_open,status_progress,status_closed,SprintCapacity,TotalEstimate,RstartDate,RendDate,sprint,sStartDate,sendDate);
+        model.setProject(project);
+        model.setRelease(release);
+        model = RestService.FireRules(model);
+//         DroolsTest.main(model);
+//        System.out.println(model.getColorLabel()+ " "+ model.getSprintColor());
 
         return model;
        // AggregationOutput output = collection.aggregate(match,group);

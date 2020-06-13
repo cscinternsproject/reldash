@@ -98,6 +98,8 @@ public class ReleaseModel {
 
     public void setTotal() {
         this.total = (double)(openStatus+progStatus+closeStatus);
+        if(this.total==0)
+            this.total=1.0;
     }
 
     public Double getOpenPerc() {

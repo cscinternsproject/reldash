@@ -4,7 +4,7 @@ public class request {
 
     private String project;
     private String version;
-    private String sprint;
+    private String team;
 
     public String getProject() {
         return project;
@@ -14,14 +14,14 @@ public class request {
         return version;
     }
 
-    public String getSprint() {
-        return sprint;
+    public String getTeam() {
+        return team;
     }
 
     public request(String project, String version, String sprint) {
         this.project = project;
         this.version = version;
-        this.sprint = sprint;
+        this.team = sprint;
     }
 
 }

@@ -30,7 +30,7 @@ public class ServiceController {
     @RequestMapping(value = "/ReleaseDashboard", method = RequestMethod.POST)
     @CrossOrigin(origins = "*")
     public ReleaseModel getRelease(@RequestBody request obj){
-    return  Db.getResponse(obj.getProject(),obj.getVersion());
+    return  Db.getResponse(obj.getProject(),obj.getVersion(),obj.getTeam());
 //       RestService.get();
 //        DroolsTest.main(lst.getLst());
 //

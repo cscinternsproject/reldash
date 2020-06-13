@@ -3,10 +3,8 @@ package main;
 import com.google.gson.Gson;
 
 import com.mongodb.*;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.MongoClient;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
@@ -16,6 +14,7 @@ import main.service.RestService;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.conversions.Bson;
 
 import javax.swing.*;
 import java.text.SimpleDateFormat;
@@ -40,8 +39,9 @@ public class Db{
 
 
 
-    public static ReleaseModel  getResponse( String project,String release ) {
-
+    public static ReleaseModel  getResponse( String project,String release ,String team) {
+//        System.out.println("tesm");
+//System.out.println(team);
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase("JiraIssue");
@@ -51,12 +51,18 @@ public class Db{
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("name", "John");
         //MongoCursor<Document> cursor = collection.find(Filters.eq("Status","open")).iterator();
+        Bson compo;
+        if(team!=null)
+         compo= Filters.eq("Component",team);
+        else
+            compo=Filters.regex("Component","");
 
         String pattern = release+"_"+project;
-        long status_open =  collection.countDocuments(and(Filters.regex("key",pattern),Filters.eq("Status","open")));
-        long status_closed =  collection.countDocuments(and(Filters.regex("key",pattern),Filters.eq("Status","closed")));
-        long status_progress =  collection.countDocuments(and(Filters.regex("key",pattern),Filters.eq("Status","progress")));
-
+        long status_open =  collection.countDocuments(and(Filters.regex("key",pattern),compo,Filters.eq("Status","open")));
+        long status_closed =  collection.countDocuments(and(Filters.regex("key",pattern),compo,Filters.eq("Status","closed")));
+        long status_progress =  collection.countDocuments(and(Filters.regex("key",pattern),compo,Filters.eq("Status","progress")));
+        System.out.println("open");
+        System.out.println(status_open);
         Document doc =  CapColl.find(Filters.eq("Release",release)).first();
 
 
@@ -71,32 +77,35 @@ public class Db{
         Date  sStartDate = sprintDoc.getDate("S_startDate");
         Date sendDate = sprintDoc.getDate("S_endDate");
 
+//
+//      Double ReleaseCapacity= (Double) ( CapColl.aggregate(
+//                Arrays.asList(
+//                        Aggregates.match(and(Filters.eq("project", "Release board"),
+//                                Filters.eq("Release", release))),
+//                        Aggregates.group("MemberCapacity", Accumulators.sum("count", "$MemberCapacity"))
+//                )
+//        ).first()).get("count");
 
-      Double ReleaseCapacity= (Double) ( CapColl.aggregate(
+        AggregateIterable<Document> SprintDoc= CapColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(and(Filters.eq("project", "Release board"),
-                                Filters.eq("Release", release))),
-                        Aggregates.group("MemberCapacity", Accumulators.sum("count", "$MemberCapacity"))
-                )
-        ).first()).get("count");
-
-        Double SprintCapacity= ((Double) ( CapColl.aggregate(
-                Arrays.asList(
-                        Aggregates.match(and(Filters.eq("project", "Release board"),
-                                Filters.eq("Release", release),Filters.eq("Sprint", sprint)
-                                )),
+                                Filters.eq("Release", release),Filters.eq("Component",team),Filters.eq("Sprint", sprint)
+                        )),
                         Aggregates.group("", Accumulators.sum("count", "$MemberCapacity"))
                 )
-        ).first()).get("count"))/8;
+        );
+        Double SprintCapacity=  (SprintDoc .first()!=null)?(Double)SprintDoc .first().get("count")/8:0.0;
 
-        Double TotalEstimate= (Double) ( collection.aggregate(
+        AggregateIterable<Document> estimDoc =collection.aggregate(
                 Arrays.asList(
-                        Aggregates.match(and(Filters.regex("key", pattern),
+                        Aggregates.match(and(Filters.regex("key", pattern),Filters.eq("Component",team),
                                 Filters.eq("Sprint", sprint)
                         )),
                         Aggregates.group("", Accumulators.sum("count", "$OriginalEstimates"))
                 )
-        ).first()).get("count");
+        );
+
+        Double TotalEstimate=  ( estimDoc.first()!=null)? (Double)estimDoc.first().get("count"):0.0;
 
 
 //

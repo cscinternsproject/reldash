@@ -1,16 +1,9 @@
 package main;
 
 import main.model.ReleaseModel;
-import main.model.Student;
-import main.service.RestService;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.rule.FactHandle;
-import org.springframework.beans.factory.annotation.Autowired;
-
-
-import java.util.ArrayList;
 
 public class DroolsTest {
 

@@ -1,12 +1,12 @@
-package main.JiraModel.ProjectApi;
+package main.JiraModel.ProjectId;
+
 import java.util.List;
 
-public class ProjectList {
-
+public class ProjectIdList {
     private  int startAt;
     private  int maxResults;
     private  int total;
-    private List<project> values;
+    private List<projectId> values;
 
     public int getStartAt() {
         return startAt;
@@ -32,11 +32,11 @@ public class ProjectList {
         this.total = total;
     }
 
-    public List<project> getValues() {
+    public List<projectId> getValues() {
         return values;
     }
 
-    public void setValues(List<project> values) {
+    public void setValues(List<projectId> values) {
         this.values = values;
     }
 }

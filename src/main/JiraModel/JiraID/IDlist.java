@@ -1,22 +1,14 @@
-package main.JiraModel;
+package main.JiraModel.JiraID;
+
+import main.JiraModel.IssueApi.Issue;
 
 import java.util.List;
 
-public class IssueList {
-
-
+public class IDlist {
     private  int startAt;
     private  int maxResults;
     private  int total;
-    private  List<Issue> issues;
-
-    public List<Issue> getIssues() {
-        return issues;
-    }
-
-    public void setIssues(List<Issue> issues) {
-        this.issues = issues;
-    }
+    private List<IssueID> issues;
 
     public int getStartAt() {
         return startAt;
@@ -42,6 +34,11 @@ public class IssueList {
         this.total = total;
     }
 
+    public List<IssueID> getIssues() {
+        return issues;
+    }
 
+    public void setIssues(List<IssueID> issues) {
+        this.issues = issues;
+    }
 }
-

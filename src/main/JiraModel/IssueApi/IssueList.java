@@ -1,12 +1,24 @@
-package main.JiraModel.ProjectApi;
+package main.JiraModel.IssueApi;
+
+import main.JiraModel.IssueApi.Issue;
+
 import java.util.List;
 
-public class ProjectList {
+public class IssueList {
+
 
     private  int startAt;
     private  int maxResults;
     private  int total;
-    private List<project> values;
+    private  List<Issue> issues;
+
+    public List<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(List<Issue> issues) {
+        this.issues = issues;
+    }
 
     public int getStartAt() {
         return startAt;
@@ -32,11 +44,6 @@ public class ProjectList {
         this.total = total;
     }
 
-    public List<project> getValues() {
-        return values;
-    }
 
-    public void setValues(List<project> values) {
-        this.values = values;
-    }
 }
+

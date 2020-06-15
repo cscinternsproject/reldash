@@ -1,4 +1,4 @@
-package main.JiraModel.ApiObject;
+package main.JiraModel.IssueApi.ApiObject;
 import java.util.Date;
 
 public class releaseMod {

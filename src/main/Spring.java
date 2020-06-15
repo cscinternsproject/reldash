@@ -5,8 +5,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
 
 
 @SpringBootApplication
@@ -16,22 +20,7 @@ public class Spring {
         SpringApplication.run(Spring.class, args);
 
     }
-//
-//    @Bean
-//    public RestTemplate restTemplate(RestTemplateBuilder builder) {
-//        return builder.build();
-//    }
-//
-//    @Bean
-//    public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
-//
-//
-//        return args -> {
-//
-//
-//            String quote = restTemplate.getForObject(
-//                    "https://cscinterns2020.atlassian.net//rest/api/3/issue/JIRARD-4", String.class);
-//           System.out.println(quote);
-//        };
-//    }
+
+
+
 }

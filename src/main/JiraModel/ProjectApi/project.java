@@ -1,6 +1,7 @@
 package main.JiraModel.ProjectApi;
 
-import main.JiraModel.ApiObject.sprint;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import main.JiraModel.IssueApi.ApiObject.sprint;
 
 import java.util.List;
 
@@ -8,6 +9,7 @@ public class project {
 
     private String key;
     private  String name;
+    @JsonIgnore
     private String self;
     private List<version> releases;
     private List<sprint> sprints;

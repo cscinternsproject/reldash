@@ -2,7 +2,7 @@ package main.DbModel;
 
 public class IssueModel {
     private String key;
-    private int id;
+    private String id;
     private String IssueType;
     private String Summary;
     private String status;
@@ -10,7 +10,7 @@ public class IssueModel {
     private String component;
     private String sprint;
 
-    public IssueModel(String key, int id, String issueType, String summary,
+    public IssueModel(String key, String id, String issueType, String summary,
                       String status, String assignee, String component, String sprint) {
         this.key = key;
         this.id = id;
@@ -30,11 +30,11 @@ public class IssueModel {
         this.key = key;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

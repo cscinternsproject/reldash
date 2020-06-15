@@ -1,4 +1,4 @@
-package main.JiraModel.ApiObject;
+package main.JiraModel.IssueApi.ApiObject;
 
 public class project {
     private  String name;

@@ -1,5 +1,4 @@
-package main.JiraModel.ApiObject;
-import org.springframework.beans.factory.annotation.Value;
+package main.JiraModel.IssueApi.ApiObject;
 
 import java.util.Date;
 

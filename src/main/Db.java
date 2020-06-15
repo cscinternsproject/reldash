@@ -1,15 +1,22 @@
 package main;
 
+import com.google.gson.Gson;
 import com.mongodb.*;
 import com.mongodb.MongoClient;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
+import main.JiraModel.IssueApi.ApiObject.sprint;
+import main.JiraModel.IssueApi.Issue;
 import main.model.ReleaseModel;
 import main.service.RestService;
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
+import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.*;
 
@@ -126,4 +133,48 @@ public class Db{
 
         //return lst;
     }
+
+
+    public static <T> void SaveObject(T obj,String collName,Class<T> classType,String filterKey,String id){
+
+        CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase db = mongoClient.getDatabase("test");
+        db = db.withCodecRegistry(pojoCodecRegistry);
+        MongoCollection<T> collection = db.getCollection(collName,classType);
+        //MongoCollection<Document> collection = db.getCollection("issues");
+        Gson gson = new Gson();
+       Document doc= Document.parse(gson.toJson(obj));
+        try {
+            collection.updateOne( Filters.eq(filterKey,id),new Document("$set",doc) , (new UpdateOptions()).upsert(true));
+        }
+        catch (MongoException err){
+            System.out.println(err);
+        }
+
+    }
+
+
+    public static <T> void SaveProjectFields(List<T> lst, String collName,Class<T> classType,String key,String field){
+
+        CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase db = mongoClient.getDatabase("test");
+        db = db.withCodecRegistry(pojoCodecRegistry);
+        MongoCollection<T> collection = db.getCollection(collName, classType);
+        //MongoCollection<Document> collection = db.getCollection("issues");
+        for(T obj:lst) {
+            try {
+                collection.updateOne(Filters.eq("key", key), new Document("$push", new Document(field, obj)));
+            } catch (MongoException err) {
+                System.out.println(err);
+            }
+        }
+
+    }
+
 }

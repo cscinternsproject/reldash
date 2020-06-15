@@ -1,7 +1,6 @@
-package main.JiraModel;
+package main.JiraModel.IssueApi;
 
-import main.JiraModel.ApiObject.*;
-import org.springframework.beans.factory.annotation.Value;
+import main.JiraModel.IssueApi.ApiObject.*;
 
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class field {
         this.fixVersions = fixVersions;
     }
 
-    public main.JiraModel.ApiObject.assignee getAssignee() {
+    public main.JiraModel.IssueApi.ApiObject.assignee getAssignee() {
         if(assignee!=null)
             return assignee;
         else {
@@ -76,7 +75,7 @@ public class field {
         }
     }
 
-    public void setAssignee(main.JiraModel.ApiObject.assignee assignee) {
+    public void setAssignee(main.JiraModel.IssueApi.ApiObject.assignee assignee) {
         this.assignee = assignee;
     }
 

@@ -9,13 +9,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { CapacityComponent } from './capacity/capacity.component';
 import { ProgressComponent } from './progress/progress.component';
 import { FormsModule } from '@angular/forms';
+import { BarsComponent } from './bars/bars.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeadComponent,
     CapacityComponent,
-    ProgressComponent
+    ProgressComponent,
+    BarsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceService } from '../service.service';
 import {Chart} from 'chart.js';
+import {BehaviorSubject} from 'rxjs';
 
 
 @Component({
@@ -16,6 +17,13 @@ export class BarsComponent implements OnInit {
   constructor(private dataservice: ServiceService) { }
 
   ngOnInit(): void {
+
+
+    this.dataservice.currentMessage.subscribe(message => {
+
+      this.Bar = message;
+      console.log(this.Bar)
+    });
 
     this.PieChart = new Chart('pieChart', {
     type: 'pie',

@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 declare const bar: any;
 
 @Component({
@@ -14,7 +15,7 @@ declare const bar: any;
 })
 export class HeadComponent implements OnInit {
    Data : any;
-   Projectselect : string;
+   Projectselect : any;
    Releaseselect : any;
    Compselect : any;
    Comp : any;
@@ -23,13 +24,14 @@ export class HeadComponent implements OnInit {
    Info : any;
    Bar : any;
    Call : any;
-
+   progressData:any
   constructor(private dataservice: ServiceService) { }
 
 
 
   ngOnInit(): void {
 
+    this.dataservice.currentMessage.subscribe(message => this.progressData = message);
 
     this.Info={rstartDate:"",rendDate:"",sstartDate:"",sendDate:""};
     this.Call={ "Capacty": "",
@@ -38,7 +40,7 @@ export class HeadComponent implements OnInit {
     this.dataservice.getParameter()
     .subscribe(data => {
 
-
+console.log(data)
     this.Data = data;
     console.log(this.Data);
 
@@ -51,8 +53,11 @@ export class HeadComponent implements OnInit {
 
     Info.rendDate = (new Date(Info.rendDate)).toDateString();
     Info.rstartDate = new Date(Info.rstartDate).toDateString();
-    Info.sstartDate =(new Date(Info.SstartDate)).toDateString();
-    Info.sendDate = (new Date(Info.SendDate)).toDateString();
+    Info.sstartDate =(new Date(Info.sstartDate)).toDateString();
+    Info.sendDate = (new Date(Info.sendDate)).toDateString();
+    this.Info.releasePerc=(1-parseFloat( this.Info.releasePerc.toFixed(2)))*100;
+    bar(parseInt((this.Info.releasePerc)));
+    this.dataservice.changeMessage(this.Info)
    // Data.project ="Release Dashboard";
     //Data.release ="Release1";
     console.log("datr")
@@ -60,8 +65,7 @@ export class HeadComponent implements OnInit {
 
   }
   onProjectselect() : any{
-    console.log(this.Projectselect);
-    this.dataservice.getName(this.Projectselect)
+       this.dataservice.getName(this.Projectselect)
     .subscribe(response => {this.Response = response;
       console.log(response);
 
@@ -88,21 +92,21 @@ onCompselect() : any{
 
 onButtonselect() : any
 {
-  this.dataservice.getDate()
+  this.dataservice.getDate(this.Projectselect,this.Releaseselect)
   .subscribe(data => {this.Info = data;
   console.log(data);
-
   this.date(this.Info);
 
-  })
-  this.dataservice.getProgress()
-     .subscribe(data => {this.Call = data;
-     console.log(this.Call);
+  this.dataservice.getRules(this.Info);
 
-     this.Call.releasePerc=(1-parseFloat( this.Call.releasePerc.toFixed(2)))*100;
-     console.log(this.Call)
-       bar(parseInt((this.Call.releasePerc)));
-     });
+  })
+
+
+
+
+
+
+
 
 }
 

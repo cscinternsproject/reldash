@@ -1,0 +1,74 @@
+
+<div class="container ">
+<div  class="col-lg-5 col-sm-4 col-xs-4 col-md-4">
+<div class="shadow p-3 mb-5 bg-white rounded ">
+<Div id="heading" class=".font-weight-bold"><h1>Release Health Dashboard</h1></Div>
+<div class="container ">
+
+  <div  class="col-lg-2 col-sm-2 col-xs-2 col-md-2">
+<select class="btn btn-primary w-75" [(ngModel)]='Projectselect' (ngModelChange)='onProjectselect()'>
+  <option class="p-3 mb-2 bg-secondary text-white" *ngFor = 'let x of Data'[value]="x">{{x}}</option>
+</select>
+</div>
+
+
+<div class="col-lg-2 col-sm-2 col-xs-2 col-md-2">
+<select class="btn btn-primary w-75"  [(ngModel)]='Releaseselect'(ngModelChange)='onReleaseselect()'>
+  <option class="p-3 mb-2 bg-secondary text-white" *ngFor = 'let n of Response'[value] = "n">{{n}}</option> 
+</select>
+</div>
+</div>
+
+<div id="heading1" class = "container">
+<div class="col-lg-2 col-sm-2 col-xs-2 col-md-2">
+<select class="btn btn-primary w-75" [(ngModel)]='Compselect'>
+  <option class="p-3 mb-2 bg-secondary text-white" *ngFor = 'let p of Comp'[value] = "p">{{p}}</option> 
+</select>
+</div>
+
+
+<div class = "col-lg-2 col-sm-2 col-xs-2 col-md-2">
+<button class="btn btn-primary  w-75" (click)="onButtonselect()">Select</button>
+</div>
+
+
+</div>
+</div>
+</div>
+<div  class="col-lg-7 col-sm-8 col-xs-8 col-md-8 ">
+
+
+<div class="shadow p-3 mb-5 bg-white rounded ">
+
+  <div>
+    <div class="chart " id="graph" ></div>
+    <div  id="per"><h4>{{Call.releasePerc}}%</h4></div>
+  </div>
+
+  <h4>
+  <div class=" shadow-xs bg-white rounded text-dark border">
+    <div class="column" >{{Info.sprint}}</div>
+    <div class="column" >{{Info.sstartDate}}</div>
+  <div  class="column">{{Info.sendDate}}</div>
+  
+  </div>
+  </h4>
+  
+  <h4>
+  <Div class=" text-secondary">Release StartDate - {{Info.rstartDate}}</Div>
+  <Div class="text-secondary">Release EndDate - {{Info.rendDate}}</Div>
+  </h4>
+  
+  
+  <!--
+    <button type="button" class="btn btn-light bg-white"> <h4> <div class="column" >{{Info.sprint}}</div>
+    <div class="column" >{{Info.SstartDate}}</div>
+  <div  class="column">{{Info.SendDate}}</div> </h4></button>
+  
+
+  -->
+ 
+
+</div>
+</div>
+</div>

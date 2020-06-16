@@ -3,8 +3,8 @@ console.log("yo")
 var options = {
    // percent:  el.getAttribute('data-percent') || 25,
    percent:val,
-    size: el.getAttribute('data-size') || 130,
-    lineWidth: el.getAttribute('data-line') || 10,
+    size: el.getAttribute('data-size') || 110,
+    lineWidth: el.getAttribute('data-line') || 8,
     rotate: el.getAttribute('data-rotate') || 0
 }
 

@@ -4,7 +4,7 @@ import  main.model.ReleaseModel
 
 rule "Sprint over"
 	when
-		Release: ReleaseModel(SprintPerc>0.2,releasePerc)
+		Release: ReleaseModel(SprintPerc>0.2)
 	then
 		Release.setSprintColor("Red");
 	end

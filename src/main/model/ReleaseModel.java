@@ -81,7 +81,7 @@ public class ReleaseModel {
 
     public void setSprintPerc() {
         double diff = SprintCapacity - ExpectedCapacity;
-        if(diff<0)
+        if(diff<=0)
         {
             SprintPerc = 0.0;
             return;
@@ -90,7 +90,7 @@ public class ReleaseModel {
 
     }
 
-    private Double SprintPerc;
+    private Double SprintPerc=0.0;
 
     public Double getTotal() {
         return total;
@@ -133,6 +133,7 @@ public class ReleaseModel {
     }
 
     public void setReleasePerc() {
+        System.out.println("perc");
         long diff = RendDate.getTime() - RstartDate.getTime();
         long days =TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
         Date period = new Date();

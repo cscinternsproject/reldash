@@ -1,15 +1,15 @@
 package main.model;
 
 public class ProjList {
-   private String id;
+   private String name;
    private String key;
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setName(String id) {
+        this.name = id;
     }
 
     public String getKey() {

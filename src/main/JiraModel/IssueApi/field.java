@@ -11,12 +11,38 @@ public class field {
     private project project;
     private List<releaseMod> fixVersions;
     private status status;
-    private component component;
-
+    private List<component>components;
     private assignee assignee;
-
     private String summary;
+    private int OriginalEstimates=4;
+    private int TimeSpent=3;
+    private Double MemberCapacity=25.0;
 
+    public Double getMemberCapacity() {
+        return MemberCapacity;
+    }
+
+    public void setMemberCapacity(Double memberCapacity) {
+        MemberCapacity = memberCapacity;
+    }
+
+    public int getOriginalEstimates() {
+
+        return OriginalEstimates;
+    }
+
+    public void setOriginalEstimates(int originalEstimates) {
+        this.OriginalEstimates = originalEstimates;
+    }
+
+    public int getTimeSpent() {
+
+        return TimeSpent;
+    }
+
+    public void setTimeSpent(int timeSpent) {
+        this.TimeSpent = timeSpent;
+    }
 
     public issuetype getIssuetype() {
         if(issuetype!=null)
@@ -93,18 +119,18 @@ public class field {
         this.status = status;
     }
 
-    public component getComponent() {
-        if(component!=null)
-            return component;
-        else {
-            component obj= new component();
-            obj.setName("Not available");
-            return obj;
+    public List<component> getComponents() {
+        if(components.size()==0) {
+          component cmp=  new component();
+          cmp.setName("not available");
+            components.add(cmp);
+            return components;
         }
+        return  components;
     }
 
-    public void setComponent(component component) {
-        this.component = component;
+    public void setComponents(List<component> component) {
+        this.components = component;
     }
 
 

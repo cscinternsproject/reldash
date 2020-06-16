@@ -1,6 +1,7 @@
 package main.service;
 
 import main.Db;
+import main.DbModel.Capacity;
 import main.DbModel.IssueModel;
 import main.JiraModel.IssueApi.ApiObject.sprint;
 import main.JiraModel.IssueApi.Issue;
@@ -59,12 +60,12 @@ System.out.println("rest servie");
                String id = obj.getJiraID();
                String Status = obj.getFields().getStatus().getName();
                String Assignee= obj.getFields().getAssignee().getDisplayName();
-               String Component = obj.getFields().getComponent().getName();
+               String Component = obj.getFields().getComponents().get(0).getName();
 
 
 
-               IssueModel IssueObJ = new IssueModel(ProjectKey,id,IssueType,Summary,Status,Assignee,Component,Sprint);
-               System.out.println(IssueObJ.getAssignee()+" "+IssueObJ.getComponent()+" "+ IssueObJ.getSprint()+" "+IssueObJ.getStatus()+" "+IssueObJ.getSummary());
+             //  IssueModel IssueObJ = new IssueModel(ProjectKey,id,IssueType,Summary,Status,Assignee,Component,Sprint);
+             //  System.out.println(IssueObJ.getAssignee()+" "+IssueObJ.getComponent()+" "+ IssueObJ.getSprint()+" "+IssueObJ.getStatus()+" "+IssueObJ.getSummary());
            }
 
 //       getIssue(response.getBody().getValues());
@@ -80,13 +81,19 @@ System.out.println("rest servie");
         HttpEntity request = new HttpEntity(createHeaders());
         ResponseEntity<ProjectIdList>response = restTemplate.exchange(
                 url, HttpMethod.GET,request,ProjectIdList.class);
-
+       for(projectId obj:response.getBody().getValues())
+       {  project prj = new project();
+       prj.setKey(obj.getKey());
+       prj.setName(obj.getName());
+         saveProject(prj);
+       }
         return response.getBody().getValues();
     }
 
     public static void saveProject(project obj){
         System.out.println(obj.getName()+" "+obj.getKey());
-Db.SaveObject(obj,"newProj",project.class,"key",obj.getKey());
+        obj.setReleases(new ArrayList<version>());
+Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
     }
 
 
@@ -101,14 +108,27 @@ Db.SaveObject(obj,"newProj",project.class,"key",obj.getKey());
                 url, HttpMethod.GET,
                 request,Issue.class);
 
-        System.out.println(response.getBody().getFields().getAssignee().getDisplayName()+" "+response.getBody().getJiraID());
+        System.out.println(id);
         Issue obj = response.getBody();
         if(obj.getFields().getFixVersions().size()==0)
             return;;
         String key = obj.getFields().getProject().getKey()+"_"+
                 obj.getFields().getFixVersions().get(0).getName()+"_"+obj.getFields().getSprint().getName();
-        obj.setKey(key);
-        Db.SaveObject(obj,"new",Issue.class,"JiraID",obj.getJiraID());
+
+        String issue_id = obj.getJiraID();
+        String issue_type = obj.getFields().getIssuetype().getName();
+        String issue_summ= obj.getFields().getSummary();
+        String issue_status = obj.getFields().getStatus().getName();
+        String issue_assignee = obj.getFields().getAssignee().getDisplayName();
+        String issue_component= obj.getFields().getComponents().get(0).getName();
+        String issue_sprint = obj.getFields().getSprint().getName();
+        String issue_release = obj.getFields().getFixVersions().get(0).getName();
+
+
+       Capacity cap =new Capacity(obj.getFields().getProject().getKey(),issue_id,issue_assignee,issue_sprint,issue_release);
+        IssueModel issue = new IssueModel(key,issue_id,issue_type,issue_summ,issue_status,issue_assignee,issue_component,issue_sprint,issue_release,obj.getFields().getProject().getKey());
+        Db.SaveObject(issue,"IssueList",IssueModel.class,"JiraID",issue_id);
+        Db.SaveJiraCap(cap);
     }
 
     public static List<IssueID> getIds(){
@@ -134,7 +154,7 @@ Db.SaveObject(obj,"newProj",project.class,"key",obj.getKey());
                 url, HttpMethod.GET,
                 request,new ParameterizedTypeReference<List<version>>(){});
 
-      Db.SaveProjectFields(response.getBody(),"projects",version.class,key,"releases");
+      Db.SaveProjectFields(response.getBody(),"ListProj",version.class,key,"releases");
     }
 
 
@@ -163,7 +183,7 @@ Db.SaveObject(obj,"newProj",project.class,"key",obj.getKey());
 
 
        System.out.println(response.getBody().getValues().getClass());
-       Db.SaveProjectFields(response.getBody().getValues(),"projects",sprint.class,ProjectId,"lst");
+       Db.SaveProjectFields(response.getBody().getValues(),"ListProj",sprint.class,ProjectId,"Sprints");
 
     }
 

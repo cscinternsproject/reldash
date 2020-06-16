@@ -1,6 +1,7 @@
 package main.DbModel;
 
 public class IssueModel {
+    private String project;
     private String key;
     private String id;
     private String IssueType;
@@ -9,9 +10,10 @@ public class IssueModel {
     private String  Assignee;
     private String component;
     private String sprint;
+    private String release;
+   private Double OriginalEstimates=4.0;
 
-    public IssueModel(String key, String id, String issueType, String summary,
-                      String status, String assignee, String component, String sprint) {
+    public IssueModel(String key, String id, String issueType, String summary, String status, String assignee, String component, String sprint, String release,String project) {
         this.key = key;
         this.id = id;
         IssueType = issueType;
@@ -20,6 +22,33 @@ public class IssueModel {
         Assignee = assignee;
         this.component = component;
         this.sprint = sprint;
+        this.release = release;
+        this.project= project;
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public String getRelease() {
+        return release;
+    }
+
+    public void setRelease(String release) {
+        this.release = release;
+    }
+
+
+    public Double getOriginalEstimates() {
+        return OriginalEstimates;
+    }
+
+    public void setOriginalEstimates(Double originalEstimates) {
+        this.OriginalEstimates = originalEstimates;
     }
 
     public String getKey() {

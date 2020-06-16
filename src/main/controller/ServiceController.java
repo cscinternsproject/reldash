@@ -1,11 +1,14 @@
 package main.controller;
 
+import com.thoughtworks.xstream.io.path.Path;
 import main.Db;
 import main.DroolsTest;
 import main.JiraModel.JiraID.IssueID;
 import main.JiraModel.ProjectApi.board;
 import main.JiraModel.ProjectApi.project;
+import main.JiraModel.ProjectApi.version;
 import main.JiraModel.ProjectId.projectId;
+import main.model.ProjList;
 import main.model.ReleaseModel;
 import main.model.request;
 import main.service.RestService;
@@ -27,12 +30,29 @@ public class ServiceController {
     }
 
 
+    @RequestMapping(value = "/getProjList", method = RequestMethod.GET)
+    public List<ProjList> getProjectLists(){
+        return Db.getProjectLists();
+    }
+
+    @RequestMapping(value = "/getReleases/{id}", method = RequestMethod.GET)
+    public List<version> getReleases(@PathVariable("id") String id){
+        return Db.getReleases(id);
+    }
+
+    @RequestMapping(value = "/getTeams", method = RequestMethod.GET)
+    public List<String> getReleases(){
+        return Db.getTeams();
+    }
+
+
+
     @RequestMapping(value = "/getJiraIds", method = RequestMethod.GET)
     public List<IssueID> getJiraIds(){
         return RestService.getIds();
     }
 
-    @RequestMapping(value = "/{id}/save", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/saveIssue", method = RequestMethod.POST)
     public void SaveJira(@PathVariable("id") String id){
          RestService.SaveJira(id);
     }
@@ -53,7 +73,7 @@ public class ServiceController {
         return RestService.getBoards(id);
     }
 
-    @RequestMapping(value = "/{projId}/{id}/saveSprints", method = RequestMethod.GET)
+    @RequestMapping(value = "/{projId}/{id}/saveSprints", method = RequestMethod.POST)
     public void saveSprints(@PathVariable("id") String id,@PathVariable("projId") String key){
         System.out.println("idr");
          RestService.saveSprints(id,key);

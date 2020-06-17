@@ -47,13 +47,18 @@ export class HeadComponent implements OnInit {
 
 
   date(Info){
-
+// ISO date format to redable format
     Info.rendDate = (new Date(Info.rendDate)).toDateString();
     Info.rstartDate = new Date(Info.rstartDate).toDateString();
     Info.sstartDate =(new Date(Info.sstartDate)).toDateString();
     Info.sendDate = (new Date(Info.sendDate)).toDateString();
+
+    //rounding of percentage
     this.Info.releasePerc=(1-parseFloat( this.Info.releasePerc.toFixed(2)))*100;
+    //passing to bar function for circular dial
     bar(parseInt((this.Info.releasePerc)));
+
+    //sending data to other service
     this.dataservice.sendMessage(this.Info)
 
 
@@ -62,7 +67,7 @@ export class HeadComponent implements OnInit {
   onProjectselect() : any{
        this.dataservice.getReleases(this.Projectselect)
     .subscribe(response => {this.Response = response;
-      console.log(response);
+
 
   })
 
@@ -71,7 +76,7 @@ onReleaseselect() : any{
   console.log(this.Releaseselect);
   this.dataservice.getComp(this.Releaseselect)
   .subscribe(response => {this.Comp = response;
-    console.log(response);
+
 
 })
 
@@ -80,7 +85,7 @@ onCompselect() : any{
   console.log(this.Compselect);
   this.dataservice.getComp(this.Compselect)
   .subscribe(response => {this.Arg = response;
-    console.log(response);
+
 
 })
 }
@@ -89,7 +94,6 @@ onButtonselect() : any
 {
   this.dataservice.getReleaseData(this.Projectselect,this.Releaseselect)
   .subscribe(data => {this.Info = data;
-  console.log(data);
   this.date(this.Info);
 
 

@@ -25,6 +25,7 @@ export class BarsComponent implements OnInit {
 
     });
 
+    //team demographic pie chart initialization
     this.PieChart = new Chart('pieChart', {
     type: 'pie',
     data: {

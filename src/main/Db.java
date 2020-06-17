@@ -37,8 +37,7 @@ public class Db{
 
 
     public static ReleaseModel  getResponse( String project,String release ,String team) {
-//        System.out.println("tesm");
-//System.out.println(team);
+
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase("SSR");
@@ -60,7 +59,7 @@ public class Db{
         long status_progress =  collection.countDocuments(and(Filters.regex("key",pattern),compo,Filters.eq("status","In Progress")));
 
 
-       // System.out.println(status_open);
+
         Document doc =  CapColl.find(Filters.eq("release",release)).first();
 
 
@@ -74,15 +73,6 @@ public class Db{
         String sprint =   sprintDoc.getString("sprint");
         Date  sStartDate = sprintDoc.getDate("sstartDate");
         Date sendDate = sprintDoc.getDate("sendDate");
-System.out.print(" sprint "+ sprint);
-//
-//      Double ReleaseCapacity= (Double) ( CapColl.aggregate(
-//                Arrays.asList(
-//                        Aggregates.match(and(Filters.eq("project", "Release board"),
-//                                Filters.eq("Release", release))),
-//                        Aggregates.group("MemberCapacity", Accumulators.sum("count", "$MemberCapacity"))
-//                )
-//        ).first()).get("count");
 
         System.out.println(project+" "+sprint+" "+release+"  gere eg");
         AggregateIterable<Document> SprintDoc= CapColl.aggregate(
@@ -120,21 +110,7 @@ System.out.print(" sprint "+ sprint);
 //        System.out.println(model.getColorLabel()+ " "+ model.getSprintColor());
 
         return model;
-        // AggregationOutput output = collection.aggregate(match,group);
 
-        //    int i = 1;
-        // Getting the iterator
-        // ArrayList<Student>   lst  = new ArrayList<Student>();
-//        while (cursor.hasNext()) {
-//     Gson gson = new Gson();
-//    String lst= cursor.next().toJson();
-//            System.out.println(lst);
-////            lst.add(user);System.out.println(user.getName());
-//            i++;
-//        }
-
-
-        //return lst;
     }
 
 

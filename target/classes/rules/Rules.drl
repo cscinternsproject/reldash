@@ -1,6 +1,6 @@
 package rules
  
-import  main.model.ReleaseModel
+import  main.ReqMapModel.ReleaseModel
 rule "Release open"
 	when 
 		Release: ReleaseModel(openPerc>0.5)

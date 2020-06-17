@@ -1,4 +1,4 @@
-package main.JiraModel;
+package main.ServiceModel;
 
 import main.ServiceModel.Issues.ApiObject.sprint;
 

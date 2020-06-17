@@ -68,31 +68,28 @@ public class ServiceController {
 
     @RequestMapping(value = "/{id}/getBoards", method = RequestMethod.GET)
     public List<board> getBoards(@PathVariable("id") String id){
-        System.out.println("idr");
+
         return RestService.getBoards(id);
     }
 
     @RequestMapping(value = "/{projId}/{id}/saveSprints", method = RequestMethod.POST)
     public void saveSprints(@PathVariable("id") String id,@PathVariable("projId") String key){
-        System.out.println("idr");
+
          RestService.saveSprints(id,key);
     }
 
     @RequestMapping(value = "/{projId}/saveReleases", method = RequestMethod.POST)
     public void saveReleases(@PathVariable("projId") String key){
-        System.out.println("idr");
+
         RestService.saveReleases(key);
     }
 
     @RequestMapping(value = "/ReleaseDashboard", method = RequestMethod.POST)
     @CrossOrigin(origins = "*")
     public ReleaseModel getRelease(@RequestBody request obj){
-       // RestService.UpdateProject();
+
     return  Db.getResponse(obj.getProject(),obj.getVersion(),obj.getTeam());
-//       RestService.get();
-//        DroolsTest.main(lst.getLst());
-//
-       //return  new ArrayList<>();
+
 
     }
 

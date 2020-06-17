@@ -1,6 +1,6 @@
 package rules
 
-import  main.model.ReleaseModel
+import  main.ReqMapModel.ReleaseModel
 
 rule "Sprint over"
 	when

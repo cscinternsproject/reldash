@@ -5,7 +5,7 @@ import main.DbCollections.Capacity;
 import main.DbCollections.IssueModel;
 import main.DbCollections.version;
 import main.ServiceModel.BoardID.BoardList;
-import main.JiraModel.SprintList;
+import main.ServiceModel.SprintList;
 import main.ServiceModel.BoardID.board;
 import main.ServiceModel.Issues.ApiObject.sprint;
 import main.ServiceModel.Issues.Issue;
@@ -43,39 +43,6 @@ public class RestService {
     }
 
 
-    public static void get(){
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity request = new HttpEntity(createHeaders());
-        ResponseEntity<IssueList> response = restTemplate.exchange(
-                "https://cscinterns2020.atlassian.net/rest/agile/1.0/epic/none/issue", HttpMethod.GET,
-                request, IssueList.class);
-System.out.println("rest servie");
-      //  System.out.println(response.getBody().getIssues());
-       for(Issue obj : response.getBody().getIssues())
-           if(obj.getFields().getFixVersions().size()>0)
-           {
-               String Release = obj.getFields().getFixVersions().get(0).getName();
-               String Project = obj.getFields().getProject().getName();
-               String ProjectKey = obj.getFields().getProject().getKey();
-               String Sprint = obj.getFields().getSprint().getName();
-               String Summary = obj.getFields().getSummary();
-               String IssueType = obj.getFields().getIssuetype().getName();
-               String id = obj.getJiraID();
-               String Status = obj.getFields().getStatus().getName();
-               String Assignee= obj.getFields().getAssignee().getDisplayName();
-               String Component = obj.getFields().getComponents().get(0).getName();
-
-
-
-             //  IssueModel IssueObJ = new IssueModel(ProjectKey,id,IssueType,Summary,Status,Assignee,Component,Sprint);
-             //  System.out.println(IssueObJ.getAssignee()+" "+IssueObJ.getComponent()+" "+ IssueObJ.getSprint()+" "+IssueObJ.getStatus()+" "+IssueObJ.getSummary());
-           }
-
-//       getIssue(response.getBody().getValues());
-    }
-
-
 
 
     public static List<projectId> getProjectIds(){
@@ -100,6 +67,17 @@ System.out.println("rest servie");
 Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
     }
 
+    public static List<IssueID> getIds(){
+        String url = "https://cscinterns2020.atlassian.net/rest/agile/1.0/epic/none/issue?fields=id";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity request = new HttpEntity(createHeaders());
+        ResponseEntity<IDlist>response = restTemplate.exchange(
+                url, HttpMethod.GET,
+                request,IDlist.class);
+
+        return response.getBody().getIssues();
+    }
 
 
     public static void SaveJira(String id){
@@ -135,17 +113,6 @@ Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
         Db.SaveJiraCap(cap);
     }
 
-    public static List<IssueID> getIds(){
-        String url = "https://cscinterns2020.atlassian.net/rest/agile/1.0/epic/none/issue?fields=id";
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity request = new HttpEntity(createHeaders());
-        ResponseEntity<IDlist>response = restTemplate.exchange(
-                url, HttpMethod.GET,
-                request,IDlist.class);
-
-        return response.getBody().getIssues();
-    }
 
 
 
@@ -194,32 +161,6 @@ Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
 
 
 
-//    public static void UpdateProject(){
-//        RestTemplate restTemplate = new RestTemplate();
-//        HttpHeaders headers = new HttpHeaders();
-//        HttpEntity request = new HttpEntity(createHeaders());
-//        ResponseEntity<ProjectList> response = restTemplate.exchange(
-//                "https://cscinterns2020.atlassian.net/rest/api/3/project/search", HttpMethod.GET,
-//                request, ProjectList.class);
-//        System.out.println("rest servie");
-//        //  System.out.println(response.getBody().getIssues());
-//        for(project obj : response.getBody().getValues())
-//        {
-//            String url = "https://cscinterns2020.atlassian.net/rest/api/3/project/"+obj.getKey()+"/versions";
-//            List<version> releases = getReleases(url);
-//            obj.setReleases(releases);
-//
-//            String _url = "https://cscinterns2020.atlassian.net/rest/agile/1.0/board?projectKeyOrId="+obj.getKey();
-////            List<sprint> sprints = getSprints(_url);
-////            obj.setSprints(sprints);
-////            for(sprint sp : obj.getSprints())
-////                System.out.println(sp.getName()+" "+sp.getStartDate());
-//        }
-//
-////       getIssue(response.getBody().getValues());
-//    }
-
-//    public static List<issue>
 
     public static ReleaseModel FireRules(ReleaseModel model){
 

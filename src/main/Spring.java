@@ -21,13 +21,13 @@ public class Spring {
     }
 
     @Scheduled(fixedDelay = 10000L)
-    void someJob() throws InterruptedException{
-        System.out.println("Restart");
+    void Timer() throws InterruptedException{
+      //  System.out.println("Restart");
         List<project> PrjLst= RestService.getProject();
         RestService.saveReleases(PrjLst);
         RestService.saveSprints(PrjLst);
       List<IssueID> lst = RestService.getIds();
-      RestService.save(lst);
+      RestService.saveIds(lst);
 
     }
 

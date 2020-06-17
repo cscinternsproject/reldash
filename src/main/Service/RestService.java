@@ -27,6 +27,8 @@ public class RestService {
     }
 
     public static List<IssueID> getIds(){
+
+        //requesting Jira issue ID list
         String url = "http://localhost:8080/getJiraIds";
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity request = new HttpEntity(createHeaders());
@@ -35,8 +37,9 @@ public class RestService {
         return response.getBody();
     }
 
-    public static void save(List<IssueID> lst) {
+    public static void saveIds(List<IssueID> lst) {
         System.out.println(lst.size());
+        //for each ID ,request to save detail
         for (IssueID obj : lst) {
             System.out.println(obj.getID());
             String key = obj.getID();
@@ -48,6 +51,8 @@ public class RestService {
     }
 
      public static List<project> getProject(){
+
+        //getting list of project IDs
             String url = "http://localhost:8080/getProjectIds";
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity request = new HttpEntity(createHeaders());
@@ -58,6 +63,7 @@ public class RestService {
 
     public static void saveReleases(List<project> PrjLst){
 
+        //for each project Id getting release list
         for(project obj: PrjLst)
         {
             String url = "http://localhost:8080/"+obj.getKey()+"/saveReleases";
@@ -67,12 +73,13 @@ public class RestService {
 
         }
 
-       // return response.getBody();
+
     }
 
 
     public static void saveSprints(List<project> ProjLst){
 
+        //for each project ID requesting board list
         for(project obj:ProjLst)
         {
             String url = "http://localhost:8080/"+obj.getKey()+"/getBoards";
@@ -80,6 +87,7 @@ public class RestService {
             HttpEntity request = new HttpEntity(createHeaders());
             ResponseEntity<List<board>> response = restTemplate.exchange(url,HttpMethod.GET,request,new ParameterizedTypeReference<List<board>>(){});
 
+            //for each board ,requesting saving of Sprint details
             for(board brd : response.getBody())
             {   System.out.println(brd.getId());
                 String _url = "http://localhost:8080/"+obj.getKey()+"/"+brd.getId()+"/saveSprints";

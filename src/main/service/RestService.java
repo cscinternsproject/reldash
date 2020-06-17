@@ -33,10 +33,12 @@ public class RestService {
 
 
     public static HttpHeaders createHeaders(){
+
+        // Basic authentication
+
         return new HttpHeaders() {{
             String auth = "zaidjunaid3@gmail.com" + ":" + "9GLO9L8tCHVXB5HcTbc60C7F" ;
-            byte[] encodedAuth = Base64.encodeBase64(
-                    auth.getBytes(Charset.forName("US-ASCII")) );
+            byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")) );
             String authHeader = "Basic " + new String( encodedAuth );
             set( "Authorization", authHeader );
         }};
@@ -46,23 +48,57 @@ public class RestService {
 
 
     public static List<projectId> getProjectIds(){
+
+        //Requesting list of projects
        String url="https://cscinterns2020.atlassian.net/rest/api/3/project/search";
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
+
         HttpEntity request = new HttpEntity(createHeaders());
+
+        //requesting resource
         ResponseEntity<ProjectIdList>response = restTemplate.exchange(
                 url, HttpMethod.GET,request,ProjectIdList.class);
-       for(projectId obj:response.getBody().getValues())
+
+        List<projectId> lst = new ArrayList<>();
+
+
+        //paginated response handling
+        if(response.getBody().getTotal()<=response.getBody().getMaxResults())
+          lst=response.getBody().getValues();
+        else
+        {
+            int StartAt = response.getBody().getStartAt();
+            int total= response.getBody().getTotal();
+            int max = response.getBody().getMaxResults();
+            StartAt+=max;
+
+            // adding further page data to the list
+            while(StartAt<total)
+            {
+            //adding query parameter page start in paginated view
+                String queryUrl = url + "?startAt="+StartAt;
+              response = restTemplate.exchange(
+                        queryUrl, HttpMethod.GET,request,ProjectIdList.class);
+              StartAt+=max;
+              lst.addAll(response.getBody().getValues());
+
+            }
+        }
+
+        //Saving each project detail
+       for(projectId obj:lst)
        {  project prj = new project();
        prj.setKey(obj.getKey());
        prj.setName(obj.getName());
          saveProject(prj);
        }
-        return response.getBody().getValues();
+        return lst;
     }
 
+
     public static void saveProject(project obj){
-        System.out.println(obj.getName()+" "+obj.getKey());
+
+        //saving project details
         obj.setReleases(new ArrayList<version>());
 Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
     }
@@ -70,13 +106,42 @@ Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
     public static List<IssueID> getIds(){
         String url = "https://cscinterns2020.atlassian.net/rest/agile/1.0/epic/none/issue?fields=id";
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
+
+
+        //requesting resource
         HttpEntity request = new HttpEntity(createHeaders());
         ResponseEntity<IDlist>response = restTemplate.exchange(
                 url, HttpMethod.GET,
                 request,IDlist.class);
 
-        return response.getBody().getIssues();
+        //data list
+        List<IssueID> lst = new ArrayList<>();
+
+        //paginated response data handling
+        if(response.getBody().getTotal()<=response.getBody().getMaxResults())
+            lst=response.getBody().getIssues();
+        else
+        {
+            int StartAt = response.getBody().getStartAt();
+            int total= response.getBody().getTotal();
+            int max = response.getBody().getMaxResults();
+
+            StartAt+=max;
+            while(StartAt<total)
+            {   //adding query parameter startAt
+                String queryUrl = url + "&startAt="+StartAt;
+                response = restTemplate.exchange(
+                        queryUrl, HttpMethod.GET,request,IDlist.class);
+                StartAt+=max;
+
+                //adding each page response to list
+                lst.addAll(response.getBody().getIssues());
+
+            }
+
+        }
+
+        return lst;
     }
 
 
@@ -84,18 +149,23 @@ Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
 
         String url ="https://cscinterns2020.atlassian.net/rest/agile/1.0/issue/"+id;
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
+
+
+        //gettong issue details
         HttpEntity request = new HttpEntity(createHeaders());
         ResponseEntity<Issue>response = restTemplate.exchange(
                 url, HttpMethod.GET,
                 request,Issue.class);
 
-        System.out.println(id);
+
         Issue obj = response.getBody();
+
+        //if issue not attached to release ignore
         if(obj.getFields().getFixVersions().size()==0)
             return;;
         String key = obj.getFields().getProject().getKey()+"_"+
                 obj.getFields().getFixVersions().get(0).getName()+"_"+obj.getFields().getSprint().getName();
+
 
         String issue_id = obj.getJiraID();
         String issue_type = obj.getFields().getIssuetype().getName();
@@ -106,8 +176,10 @@ Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
         String issue_sprint = obj.getFields().getSprint().getName();
         String issue_release = obj.getFields().getFixVersions().get(0).getName();
 
-
+        //initializing collection object to be used by Db class
        Capacity cap =new Capacity(obj.getFields().getProject().getKey(),issue_id,issue_assignee,issue_sprint,issue_release);
+
+       //initializing issue object to be used by Db class
         IssueModel issue = new IssueModel(key,issue_id,issue_type,issue_summ,issue_status,issue_assignee,issue_component,issue_sprint,issue_release,obj.getFields().getProject().getKey());
         Db.SaveObject(issue,"IssueList",IssueModel.class,"JiraID",issue_id);
         Db.SaveJiraCap(cap);
@@ -119,13 +191,15 @@ Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
     public static void saveReleases(String key){
        String url = "https://cscinterns2020.atlassian.net/rest/api/3/project/"+key+"/versions";
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
+
         HttpEntity request = new HttpEntity(createHeaders());
+
+        //no paginated response here
         ResponseEntity<List<version>>response = restTemplate.exchange(
                 url, HttpMethod.GET,
                 request,new ParameterizedTypeReference<List<version>>(){});
 
-      Db.SaveProjectFields(response.getBody(),"ListProj",version.class,key,"releases");
+        Db.SaveProjectFields(response.getBody(),"ListProj",version.class,key,"releases");
     }
 
 
@@ -134,26 +208,81 @@ Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
     public static List<board> getBoards(String key){
         String url = "https://cscinterns2020.atlassian.net/rest/agile/1.0/board?projectKeyOrId="+key;
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
+
         HttpEntity request = new HttpEntity(createHeaders());
+
+        //requesting resource
         ResponseEntity<BoardList>response = restTemplate.exchange(
                 url, HttpMethod.GET,
                 request, BoardList.class);
 
-        return response.getBody().getValues();
+       //list of response
+        List<board> lst = new ArrayList<>();
+
+
+        //paginated response handling
+        if(response.getBody().getTotal()<=response.getBody().getMaxResults())
+            lst=response.getBody().getValues();
+        else
+        {
+            int StartAt = response.getBody().getStartAt();
+            int total= response.getBody().getTotal();
+            int max = response.getBody().getMaxResults();
+            StartAt+=max;
+            while(StartAt<total)
+            {
+
+                String queryUrl = url + "?startAt="+StartAt;
+                response = restTemplate.exchange(
+                        queryUrl, HttpMethod.GET,request,BoardList.class);
+                StartAt+=max;
+                //adding each paginated response to list
+                lst.addAll(response.getBody().getValues());
+
+            }
+
+        }
+
+        return lst;
     }
 
     public  static void saveSprints(String boardId,String ProjectId)
     {String url ="https://cscinterns2020.atlassian.net/rest/agile/1.0/board/"+boardId+"/sprint";
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
+
+
         HttpEntity request = new HttpEntity(createHeaders());
+        //request resource
         ResponseEntity<SprintList>response = restTemplate.exchange(
                 url, HttpMethod.GET,
                 request,SprintList.class);
 
+        //list of objects
+        List<sprint> lst = new ArrayList<>();
 
-       System.out.println(response.getBody().getValues().getClass());
+        //handling paginated response
+        if(response.getBody().getTotal()<=response.getBody().getMaxResults())
+            lst=response.getBody().getValues();
+        else
+        {
+            int StartAt = response.getBody().getStartAt();
+            int total= response.getBody().getTotal();
+            int max = response.getBody().getMaxResults();
+            StartAt+=max;
+            while(StartAt<total)
+            {
+
+                String queryUrl = url + "?startAt="+StartAt;
+                response = restTemplate.exchange(
+                        queryUrl, HttpMethod.GET,request,SprintList.class);
+                StartAt+=max;
+                lst.addAll(response.getBody().getValues());
+
+            }
+
+        }
+
+
        Db.SaveProjectFields(response.getBody().getValues(),"ListProj",sprint.class,ProjectId,"Sprints");
 
     }
@@ -165,8 +294,9 @@ Db.SaveObject(obj,"ListProj",project.class,"key",obj.getKey());
     public static ReleaseModel FireRules(ReleaseModel model){
 
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
         HttpEntity<ReleaseModel> request = new HttpEntity(model);
+
+        // used to post Data object to rule engine after Db extraction
         ResponseEntity<ReleaseModel> response = restTemplate.exchange(
                 "http://localhost:8080//Rules", HttpMethod.POST,request,ReleaseModel.class);
 

@@ -40,20 +40,26 @@ public class Db{
 
 
         MongoClient mongoClient = new MongoClient();
+        //connect to DB
         MongoDatabase db = mongoClient.getDatabase("SSR");
 
+
+        //getting collection
         MongoCollection<Document> collection = db.getCollection("IssueList");
         MongoCollection<Document> CapColl = db.getCollection("CapacityList");
 
 
         Bson compo;
+
+        //component filter
         if(team!=null)
             compo= Filters.eq("component",team);
         else
             compo=Filters.regex("component","");
 
         String pattern = project+"_"+release;
-        System.out.println(pattern);
+
+        //gettong open/close issue status count
         long status_open =  collection.countDocuments(and(Filters.regex("key",pattern),compo,Filters.eq("status","To Do")));
         long status_closed =  collection.countDocuments(and(Filters.regex("key",pattern),compo,Filters.eq("status","Test completed")));
         long status_progress =  collection.countDocuments(and(Filters.regex("key",pattern),compo,Filters.eq("status","In Progress")));
@@ -65,16 +71,21 @@ public class Db{
 
         Date RstartDate = doc.getDate("rstartDate");
         Date RendDate =doc.getDate("rendDate");
+
+
         Date CurrentDate = new Date();
+
+        //getting current active sprint by present Date
         Document sprintDoc =  CapColl.find(and(Filters.eq("release",release),Filters.lte("sstartDate",CurrentDate),
                 Filters.gte("sendDate",CurrentDate))).first();
 
-
+        //handling not done for cases when sprintDoc collection is null, i.e. no active sprint
         String sprint =   sprintDoc.getString("sprint");
         Date  sStartDate = sprintDoc.getDate("sstartDate");
         Date sendDate = sprintDoc.getDate("sendDate");
 
-        System.out.println(project+" "+sprint+" "+release+"  gere eg");
+
+        //summing member capacity column
         AggregateIterable<Document> SprintDoc= CapColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(and(Filters.eq("project", project),
@@ -84,8 +95,11 @@ public class Db{
                 )
         );
 
+        //dividing by default 8(work hour) ,assuming member capacity is already manually input
         Double SprintCapacity=  (SprintDoc .first()!=null)?(Double)SprintDoc .first().get("count")/8:0.0;
 
+
+        //summing original estime column
         AggregateIterable<Document> estimDoc =collection.aggregate(
                 Arrays.asList(
                         Aggregates.match(and(Filters.regex("key", pattern),
@@ -97,17 +111,19 @@ public class Db{
 
         Double TotalEstimate=  ( estimDoc.first()!=null)? (double)estimDoc.first().get("count"):0.0;
 
-          System.out.println(status_open+" "+status_closed+" "+SprintCapacity+" "+TotalEstimate+" "+RstartDate+" "+sStartDate);
+
 //
 
 
         ReleaseModel model= new ReleaseModel();
+        //updatin model object with data required by rules
         model.setData(status_open,status_progress,status_closed,SprintCapacity,TotalEstimate,RstartDate,RendDate,sprint,sStartDate,sendDate);
         model.setProject(project);
         model.setRelease(release);
+
+        //passing object to drools service
         model = RestService.FireRules(model);
-//         DroolsTest.main(model);
-//        System.out.println(model.getColorLabel()+ " "+ model.getSprintColor());
+
 
         return model;
 
@@ -116,6 +132,7 @@ public class Db{
 
     public static <T> void SaveObject(T obj,String collName,Class<T> classType,String filterKey,String id){
 
+        //enables pojo json mapping ,no need to use GSON
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
@@ -123,9 +140,9 @@ public class Db{
         MongoDatabase db = mongoClient.getDatabase("SSR");
         db = db.withCodecRegistry(pojoCodecRegistry);
         MongoCollection<T> collection = db.getCollection(collName,classType);
-        //MongoCollection<Document> collection = db.getCollection("issues");
 
         try {
+            //updating object, with upsert operation
             collection.updateOne( Filters.eq(filterKey,id),new Document("$set",obj) , (new UpdateOptions()).upsert(true));
         }
         catch (MongoException err){
@@ -139,38 +156,40 @@ public class Db{
 
     public static  void SaveJiraCap(Capacity obj){
 
+        //enables pojo json mapping ,no need to use GSON
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
         MongoClient mongoClient = new MongoClient();
         MongoDatabase db = mongoClient.getDatabase("SSR");
         db = db.withCodecRegistry(pojoCodecRegistry);
+
+        //getting collections
         MongoCollection<Capacity> collection = db.getCollection("CapacityList",Capacity.class);
         MongoCollection<Document> CapColl = db.getCollection("ListProj");
 
-      //  System.out.println(obj.getProject());
+          //finding project document
         Document proj =  CapColl.find(Filters.eq("key",obj.getProject())).first();
         List<Document> sprints = (List<Document>) proj.get("Sprints");
         List<Document> releases = (List<Document>) proj.get("releases");
 
-  //      System.out.println("kaaam");
-   //     System.out.println(obj.getSprint());
-        //MongoCollection<Document> collection = db.getCollection("issues");
+
+        // in project document search for current sprint dates
         for(int i=0;i<sprints.size();i++)
-        {   // System.out.println(sprints.get(i).get("name"));
+        {
 
             if(sprints.get(i).get("name").equals(obj.getSprint()))
             {
                 obj.setSendDate(sprints.get(i).getDate("endDate"));
                 obj.setSstartDate(sprints.get(i).getDate("startDate"));
-              // System.out.println("diif");
-               // System.out.println(obj.getSstartDate());
+
                 break;
             }
         }
 
+        // in project document search for selected release dates
         for(int i=0;i<releases.size();i++)
-        {   // System.out.println(sprints.get(i).get("name"));
+        {
 
             if(releases.get(i).get("name").equals(obj.getRelease()))
             {   Date sdate =releases.get(i).getDate("releaseDate");
@@ -178,16 +197,12 @@ public class Db{
             System.out.println(sdate);
                 obj.setRendDate(sdate);
                 obj.setRstartDate(releases.get(i).getDate("startDate"));
-                // System.out.println("diif");
-                // System.out.println(obj.getSstartDate());
+
                 break;
             }
         }
 
-       // System.out.println("obj.getSstartDate()");
-       // System.out.println(obj.getSstartDate());
-//        Gson gson = new Gson();
-//        Document doc= Document.parse(gson.toJson(obj));
+
         try {
             collection.updateOne( Filters.eq("key",obj.getKey()),new Document("$set",obj) , (new UpdateOptions()).upsert(true));
         }
@@ -199,7 +214,7 @@ public class Db{
 
 
     public static <T> void SaveProjectFields(List<T> lst, String collName,Class<T> classType,String key,String field){
-
+        //enables pojo json mapping ,no need to use GSON
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
@@ -207,9 +222,12 @@ public class Db{
         MongoDatabase db = mongoClient.getDatabase("SSR");
         db = db.withCodecRegistry(pojoCodecRegistry);
         MongoCollection<T> collection = db.getCollection(collName, classType);
-        //MongoCollection<Document> collection = db.getCollection("issues");
+
+
+        //for each document
         for(T obj:lst) {
             try {
+                //pulling out release, sprint array from obj ,pushing it again to enable updation
                 collection.updateOne(Filters.eq("key",key), new Document("$pull", new Document(field, obj)) , (new UpdateOptions()).upsert(true));
                 collection.updateOne(Filters.eq("key", key), new Document("$push", new Document(field, obj)) , (new UpdateOptions()).upsert(true));
             } catch (MongoException err) {
@@ -221,7 +239,7 @@ public class Db{
 
 
     public  static  List<ProjList> getProjectLists(){
-
+        //enables pojo json mapping ,no need to use GSON
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
@@ -232,6 +250,8 @@ public class Db{
         FindIterable<project> iterable=collection.find();
         MongoCursor<project> cursor = iterable.iterator();
         List<ProjList> lst = new ArrayList<ProjList>();
+
+        //get list of all projects
         while(cursor.hasNext())
         {
             ProjList obj = new ProjList();
@@ -247,7 +267,7 @@ public class Db{
     }
 
     public  static  List<version> getReleases(String key){
-
+        //enables pojo json mapping ,no need to use GSON
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
@@ -255,6 +275,8 @@ public class Db{
         MongoDatabase db = mongoClient.getDatabase("SSR");
         db = db.withCodecRegistry(pojoCodecRegistry);
         MongoCollection<project> collection = db.getCollection("ListProj", project.class);
+
+        //get project document with specified key
         project releases=collection.find(Filters.eq("key",key)).first();
 
 
@@ -266,6 +288,7 @@ public class Db{
 
     public  static  List<String> getTeams(){
 
+        //enables pojo json mapping ,no need to use GSON
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
@@ -273,16 +296,18 @@ public class Db{
         MongoDatabase db = mongoClient.getDatabase("SSR");
         db = db.withCodecRegistry(pojoCodecRegistry);
         MongoCollection<project> collection = db.getCollection("IssueList", project.class);
+        //get all distinct component list from issue collection
         DistinctIterable<String> components = collection.distinct("component",String.class);
 
         MongoCursor<String> cursor = (MongoCursor<String>) components.iterator();
         List<String> lst = new ArrayList<String>();
+
+        //select all components name apart from "not available"
         while(cursor.hasNext())
         {
             ProjList obj = new ProjList();
             String comp =cursor.next();
-            System.out.println("component");
-            System.out.println(comp);
+
             if(comp.equals("not available"))
                 continue;
             lst.add(comp);

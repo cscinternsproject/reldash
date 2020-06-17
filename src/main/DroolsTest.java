@@ -14,8 +14,14 @@ public class DroolsTest {
 
             KieServices ks = KieServices.Factory.get();
             KieContainer kContainer = ks.getKieClasspathContainer();
+
+            //two types of session in drools ,stateful session here
             KieSession kSession = kContainer.newKieSession("ksession-rule");
+
+            //inserting obj in drools memory
             kSession.insert(model);
+
+            //rules fired
             kSession.fireAllRules();
 
 

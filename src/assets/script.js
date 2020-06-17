@@ -1,5 +1,5 @@
 function bar(val){var el = document.getElementById('graph'); // get canvas
-console.log("yo")
+
 var options = {
    // percent:  el.getAttribute('data-percent') || 25,
    percent:val,

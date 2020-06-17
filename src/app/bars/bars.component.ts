@@ -22,7 +22,7 @@ export class BarsComponent implements OnInit {
     this.dataservice.currentMessage.subscribe(message => {
 
       this.Bar = message;
-      console.log(this.Bar)
+
     });
 
     this.PieChart = new Chart('pieChart', {
@@ -51,14 +51,7 @@ export class BarsComponent implements OnInit {
     });
 
 
-    this.dataservice.getProgress()
-    .subscribe(data => {this.Bar = data;
-    //this.Bar.releasePerc=0.6;
-     if(this.Bar.Capacty=='Red')
-     this.Bar.Capacty='#d42626';
-     if(this.Bar.sprintColor=='Green')
-     this.Bar.sprintColor='#54a84c';
-    });
+
   }
 
 

@@ -37,14 +37,11 @@ export class HeadComponent implements OnInit {
     this.Call={ "Capacty": "",
     "sprintColor": "",
     "releasePerc":""};
-    this.dataservice.getParameter()
+    this.dataservice.getProjects()
     .subscribe(data => {
 
-console.log(data)
     this.Data = data;
-    console.log(this.Data);
 
-    console.log(this.Info);
      });
   }
 
@@ -57,15 +54,13 @@ console.log(data)
     Info.sendDate = (new Date(Info.sendDate)).toDateString();
     this.Info.releasePerc=(1-parseFloat( this.Info.releasePerc.toFixed(2)))*100;
     bar(parseInt((this.Info.releasePerc)));
-    this.dataservice.changeMessage(this.Info)
-   // Data.project ="Release Dashboard";
-    //Data.release ="Release1";
-    console.log("datr")
+    this.dataservice.sendMessage(this.Info)
+
 
 
   }
   onProjectselect() : any{
-       this.dataservice.getName(this.Projectselect)
+       this.dataservice.getReleases(this.Projectselect)
     .subscribe(response => {this.Response = response;
       console.log(response);
 
@@ -92,12 +87,12 @@ onCompselect() : any{
 
 onButtonselect() : any
 {
-  this.dataservice.getDate(this.Projectselect,this.Releaseselect)
+  this.dataservice.getReleaseData(this.Projectselect,this.Releaseselect)
   .subscribe(data => {this.Info = data;
   console.log(data);
   this.date(this.Info);
 
-  this.dataservice.getRules(this.Info);
+
 
   })
 

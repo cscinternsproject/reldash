@@ -1,6 +1,6 @@
 package main.JiraModel;
 
-import main.ServiceModel.IssueApi.ApiObject.sprint;
+import main.ServiceModel.Issues.ApiObject.sprint;
 
 import java.util.List;
 

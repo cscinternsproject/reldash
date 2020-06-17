@@ -1,12 +1,13 @@
 package main.controller;
 
 import main.Db;
+import main.DbCollections.ProjList;
 import main.DroolsTest;
 import main.ServiceModel.JiraID.IssueID;
-import main.JiraModel.board;
-import main.DbModel.project;
-import main.DbModel.version;
-import main.JiraModel.ProjectId.projectId;
+import main.ServiceModel.BoardID.board;
+import main.DbCollections.project;
+import main.DbCollections.version;
+import main.ServiceModel.ProjectId.projectId;
 import main.ReqMapModel.ReleaseModel;
 import main.ReqMapModel.request;
 import main.service.RestService;
@@ -28,7 +29,10 @@ public class ServiceController {
         return obj;
     }
 
-
+    @RequestMapping(value = "/getProjList", method = RequestMethod.GET)
+    public List<ProjList> getProjectLists(){
+        return Db.getProjectLists();
+    }
 
     @RequestMapping(value = "/getReleases/{id}", method = RequestMethod.GET)
     public List<version> getReleases(@PathVariable("id") String id){

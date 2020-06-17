@@ -1,4 +1,4 @@
-package main.JiraModel.ProjectId;
+package main.ServiceModel.ProjectId;
 
 public class projectId {
     private  String key;

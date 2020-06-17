@@ -1,4 +1,4 @@
-package main.DbModel;
+package main.DbCollections;
 
 public class ProjList {
    private String name;

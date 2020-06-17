@@ -1,7 +1,7 @@
-package main.DbModel;
+package main.DbCollections;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import main.ServiceModel.IssueApi.ApiObject.sprint;
+import main.ServiceModel.Issues.ApiObject.sprint;
 
 import java.util.List;
 

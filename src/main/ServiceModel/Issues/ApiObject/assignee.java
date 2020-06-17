@@ -1,4 +1,4 @@
-package main.ServiceModel.IssueApi.ApiObject;
+package main.ServiceModel.Issues.ApiObject;
 
 public class assignee {
 

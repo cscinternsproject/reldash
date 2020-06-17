@@ -1,4 +1,4 @@
-package main.JiraModel;
+package main.ServiceModel.BoardID;
 
 public class board {
     private  int id;

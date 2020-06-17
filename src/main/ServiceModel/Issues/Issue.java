@@ -1,4 +1,4 @@
-package main.ServiceModel.IssueApi;
+package main.ServiceModel.Issues;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

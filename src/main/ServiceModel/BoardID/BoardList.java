@@ -1,12 +1,14 @@
-package main.JiraModel.ProjectId;
+package main.ServiceModel.BoardID;
 
 import java.util.List;
 
-public class ProjectIdList {
+public class BoardList {
+
+
     private  int startAt;
     private  int maxResults;
     private  int total;
-    private List<projectId> values;
+    private List<board> values;
 
     public int getStartAt() {
         return startAt;
@@ -32,11 +34,11 @@ public class ProjectIdList {
         this.total = total;
     }
 
-    public List<projectId> getValues() {
+    public List<board> getValues() {
         return values;
     }
 
-    public void setValues(List<projectId> values) {
+    public void setValues(List<board> values) {
         this.values = values;
     }
 }

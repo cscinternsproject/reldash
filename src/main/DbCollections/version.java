@@ -1,4 +1,4 @@
-package main.DbModel;
+package main.DbCollections;
 
 import java.util.Date;
 

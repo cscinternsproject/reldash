@@ -1,17 +1,17 @@
-package main.ServiceModel.IssueApi;
+package main.ServiceModel.Issues;
 
-import main.ServiceModel.IssueApi.ApiObject.*;
+import main.ServiceModel.Issues.ApiObject.*;
 //import main.ServiceModel.JiraID.IssueApi.ApiObject.*;
 
 import java.util.List;
 
 public class field {
 
-    private main.ServiceModel.IssueApi.ApiObject.issuetype issuetype;
-    private main.ServiceModel.IssueApi.ApiObject.sprint sprint;
-    private main.ServiceModel.IssueApi.ApiObject.project project;
+    private main.ServiceModel.Issues.ApiObject.issuetype issuetype;
+    private main.ServiceModel.Issues.ApiObject.sprint sprint;
+    private main.ServiceModel.Issues.ApiObject.project project;
     private List<releaseMod> fixVersions;
-    private main.ServiceModel.IssueApi.ApiObject.status status;
+    private main.ServiceModel.Issues.ApiObject.status status;
     private List<component>components;
     private assignee assignee;
     private String summary;
@@ -92,7 +92,7 @@ public class field {
         this.fixVersions = fixVersions;
     }
 
-    public main.ServiceModel.IssueApi.ApiObject.assignee getAssignee() {
+    public main.ServiceModel.Issues.ApiObject.assignee getAssignee() {
         if(assignee!=null)
             return assignee;
         else {
@@ -102,7 +102,7 @@ public class field {
         }
     }
 
-    public void setAssignee(main.ServiceModel.IssueApi.ApiObject.assignee assignee) {
+    public void setAssignee(main.ServiceModel.Issues.ApiObject.assignee assignee) {
         this.assignee = assignee;
     }
 

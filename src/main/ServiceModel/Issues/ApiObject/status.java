@@ -1,8 +1,8 @@
-package main.ServiceModel.IssueApi.ApiObject;
+package main.ServiceModel.Issues.ApiObject;
 
-public class issuetype {
+public class status {
 
-    private  String name;
+    private String name;
 
     public String getName() {
         return name;
@@ -12,3 +12,4 @@ public class issuetype {
         this.name = name;
     }
 }
+

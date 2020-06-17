@@ -1,4 +1,4 @@
-package main.ServiceModel.IssueApi;
+package main.ServiceModel.Issues;
 
 import java.util.List;
 

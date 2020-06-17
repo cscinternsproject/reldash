@@ -1,6 +1,6 @@
 package main.JiraModel;
 
-import main.DbModel.version;
+import main.DbCollections.version;
 
 import java.util.List;
 

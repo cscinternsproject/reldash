@@ -1,6 +1,5 @@
 package main;
 
-import com.google.gson.Gson;
 import com.mongodb.*;
 import com.mongodb.MongoClient;
 import com.mongodb.client.*;
@@ -9,18 +8,15 @@ import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import main.DbModel.Capacity;
-import main.JiraModel.IssueApi.ApiObject.sprint;
-import main.JiraModel.IssueApi.Issue;
-import main.JiraModel.ProjectApi.project;
-import main.JiraModel.ProjectApi.version;
-import main.model.ProjList;
-import main.model.ReleaseModel;
+import main.DbModel.project;
+import main.DbModel.version;
+import main.DbModel.ProjList;
+import main.ReqMapModel.ReleaseModel;
 import main.service.RestService;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
-import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.*;
 
@@ -309,6 +305,10 @@ System.out.print(" sprint "+ sprint);
         {
             ProjList obj = new ProjList();
             String comp =cursor.next();
+            System.out.println("component");
+            System.out.println(comp);
+            if(comp.equals("not available"))
+                continue;
             lst.add(comp);
         }
 

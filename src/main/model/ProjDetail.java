@@ -1,5 +1,7 @@
 package main.model;
 
+import main.DbModel.ProjList;
+
 import java.util.List;
 
 public class ProjDetail {

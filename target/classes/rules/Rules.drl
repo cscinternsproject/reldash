@@ -17,5 +17,5 @@ rule "Release closed"
 	when
 		Release: ReleaseModel(closPerc>0.5)
 	then
-		Release.setColorLabel("Red");
+		Release.setColorLabel("Green");
 	end

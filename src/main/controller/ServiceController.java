@@ -1,16 +1,14 @@
 package main.controller;
 
-import com.thoughtworks.xstream.io.path.Path;
 import main.Db;
 import main.DroolsTest;
-import main.JiraModel.JiraID.IssueID;
-import main.JiraModel.ProjectApi.board;
-import main.JiraModel.ProjectApi.project;
-import main.JiraModel.ProjectApi.version;
+import main.ServiceModel.JiraID.IssueID;
+import main.JiraModel.board;
+import main.DbModel.project;
+import main.DbModel.version;
 import main.JiraModel.ProjectId.projectId;
-import main.model.ProjList;
-import main.model.ReleaseModel;
-import main.model.request;
+import main.ReqMapModel.ReleaseModel;
+import main.ReqMapModel.request;
 import main.service.RestService;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,10 +29,6 @@ public class ServiceController {
     }
 
 
-    @RequestMapping(value = "/getProjList", method = RequestMethod.GET)
-    public List<ProjList> getProjectLists(){
-        return Db.getProjectLists();
-    }
 
     @RequestMapping(value = "/getReleases/{id}", method = RequestMethod.GET)
     public List<version> getReleases(@PathVariable("id") String id){
@@ -42,7 +36,7 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/getTeams", method = RequestMethod.GET)
-    public List<String> getReleases(){
+    public List<String> getTeams(){
         return Db.getTeams();
     }
 

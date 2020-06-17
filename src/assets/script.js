@@ -8,7 +8,16 @@ var options = {
     rotate: el.getAttribute('data-rotate') || 0
 }
 
+var oldCanvas =document.getElementById('cnvs');
+console.log(oldCanvas)
+// if(oldCanvas!=null){
+
+// var context =oldCanvas.getContext('2d');
+// context.globalCompositeOperation = 'destination-out'
+// }
+
 var canvas = document.createElement('canvas');
+canvas.id="cnvs"
 var span = document.createElement('span');
 span.id="ring";
 

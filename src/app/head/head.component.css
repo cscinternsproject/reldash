@@ -132,3 +132,11 @@ display: inline-block;
 max-height: 70px;
   margin-bottom: 50px !important;
 }
+
+.bg-color{
+  background-color: black !important;
+}
+
+.btn-color{
+  background-color:#306dcf !important;
+}

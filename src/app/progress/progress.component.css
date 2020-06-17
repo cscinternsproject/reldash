@@ -4,6 +4,8 @@
   background: #ddd;
   margin-bottom: 7%;
   float: right;
+  position: relative;
+  z-index:5;
 
 }
 .second {
@@ -30,6 +32,27 @@ float: left;;
 
 
 
+.tooltiptext {
+visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;;
+z-index: 1;
+left:160px ;
+top: -40px;;
+  /* Position the tooltip */
+
+}
+
+
+
+.first:hover .tooltiptext{
+  visibility:visible;
+}
 
 .HeadingBar{
 
